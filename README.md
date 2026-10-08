@@ -1,6 +1,6 @@
 # Analyse SQL d'une plateforme e-commerce
 
-Projet de groupe — Modélisation, chargement et analyse de données commerciales avec **PostgreSQL**.
+Projet de groupe — Modélisation, chargement et analyse de données commerciales avec **PostgreSQL**
 
 ## Objectif
 
