@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- Exercice 1 : liste des produits.
 SELECT nom, categorie, prix, stock
 FROM produit
@@ -183,4 +184,14 @@ SELECT
 FROM montants
 GROUP BY categorie_panier
 ORDER BY MIN(montant_total);
->>>>>>> origin/saif
+
+-- Exercice 12 - Analyse temporelle
+
+-- CA par mois
+SELECT TO_CHAR(co.date_commande, 'YYYY-MM') AS mois,
+       SUM(lc.quantite * lc.prix_unitaire) AS chiffre_affaires
+FROM commande co
+JOIN ligne_commande lc ON lc.commande_id = co.id
+WHERE co.statut <> 'annulée'
+GROUP BY TO_CHAR(co.date_commande, 'YYYY-MM')
+ORDER BY mois;
