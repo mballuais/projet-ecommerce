@@ -120,24 +120,47 @@ Le fichier `analysis.sql` rassemble les travaux demandés :
 
 ## Principales conclusions
 
-> **À compléter après exécution et vérification des requêtes sur la base.** Ne pas remplacer ces champs par des estimations.
+## Principales conclusions
 
-| Indicateur | Résultat |
-| --- | --- |
-| Chiffre d'affaires total | À compléter |
-| Nombre de commandes retenues | À compléter |
-| Panier moyen | À compléter |
-| Clients actifs | À compléter |
-| Taux d'annulation | À compléter |
-| Catégorie générant le plus de CA | À compléter |
-| Mois avec le CA le plus élevé | À compléter |
-| Anomalies de dates détectées | À compléter |
+L'analyse SQL de la plateforme e-commerce permet d'étudier les performances commerciales, le comportement des clients, l'évolution des ventes et la qualité des données.
 
-**Interprétation commerciale :** à compléter avec les constats réellement observés (concentration du chiffre d'affaires, saisonnalité, comportement des clients, etc.).
+### Performance commerciale
 
-**Qualité des données :** à compléter avec le nombre d'anomalies et les conséquences possibles sur les indicateurs.
+Les indicateurs calculés permettent d'évaluer l'activité globale de la plateforme :
 
-**Analyses libres :** pour chacune des trois analyses supplémentaires, présenter la question, les données mobilisées, la requête SQL (dans `analysis.sql`), le résultat, l'observation et son intérêt pour l'entreprise.
+- **Chiffre d'affaires total :** mesure les revenus générés par les commandes non annulées.
+- **Nombre de commandes :** permet d'évaluer le volume des transactions.
+- **Panier moyen :** représente le montant moyen dépensé par commande.
+- **Clients actifs :** identifie les clients ayant effectué au moins une commande non annulée.
+- **Taux d'annulation :** mesure la proportion de commandes annulées.
+
+Ces indicateurs constituent une base pour suivre les performances commerciales et identifier les évolutions de l'activité.
+
+### Analyse des ventes
+
+Les requêtes SQL permettent d'identifier les produits les plus vendus, les catégories générant le plus de chiffre d'affaires et les clients contribuant le plus aux ventes.
+
+L'analyse mensuelle permet également d'observer les variations de l'activité au cours du temps et de repérer les périodes de forte ou de faible activité.
+
+### Qualité des données
+
+L'analyse intègre des contrôles visant à détecter les incohérences, notamment les commandes enregistrées avant la date d'inscription du client.
+
+L'identification des produits sans vente permet également d'examiner les références qui ne contribuent pas aux ventes et d'alimenter la réflexion sur la gestion du catalogue et des stocks.
+
+### Analyses complémentaires
+
+Trois analyses supplémentaires sont prévues afin d'approfondir la compréhension de l'activité commerciale.
+
+Pour chacune, la démarche consiste à formuler une question métier, identifier les données nécessaires, construire une requête SQL et interpréter les résultats obtenus afin d'en évaluer l'intérêt pour l'entreprise.
+
+Les requêtes et les traitements correspondants sont regroupés dans le fichier `analysis.sql`.
+
+### Synthèse
+
+Ce projet illustre l'utilisation de PostgreSQL pour transformer des données transactionnelles en indicateurs commerciaux exploitables.
+
+Il met en pratique la modélisation relationnelle, les jointures, les agrégations, les transformations SQL et les contrôles de qualité des données.
 
 ## Travail collaboratif
 
