@@ -1,10 +1,10 @@
-ecommerce_db=> SELECT produit.nom,                                                                             
-ecommerce_db-> produit.categorie,
-ecommerce_db-> produit.prix,
-ecommerce_db-> produit.stock 
-ecommerce_db-> FROM produit
-ecommerce_db-> LEFT JOIN ligne_commande ON produit.id = ligne_commande.produit_id
-ecommerce_db-> WHERE ligne_commande.produit_id IS NULL;
+SELECT produit.nom,                                                                             
+produit.categorie,
+produit.prix,
+produit.stock 
+FROM produit
+LEFT JOIN ligne_commande ON produit.id = ligne_commande.produit_id
+WHERE ligne_commande.produit_id IS NULL;
         nom        |  categorie   |  prix  | stock                                                                                                                             
 -------------------+--------------+--------+-------
  Imprimante 1      | Informatique | 189.90 |    42
