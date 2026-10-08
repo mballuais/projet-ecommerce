@@ -1,4 +1,4 @@
-EXO 11 :
+EXERCICE 11 :
 
 -- Partie 1 : la catégorie de chaque commande
 WITH montants AS (
