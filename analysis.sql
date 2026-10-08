@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- Exercice 1 : liste des produits.
 SELECT nom, categorie, prix, stock
 FROM produit
@@ -137,7 +138,7 @@ GROUP BY DATE_TRUNC('month', date_commande)::date
 ORDER BY mois;
 
 
-EXO 11 :
+--EXO 11 :
 
 -- Partie 1 : la catégorie de chaque commande
 WITH montants AS (
@@ -198,6 +199,7 @@ GROUP BY TO_CHAR(co.date_commande, 'YYYY-MM')
 ORDER BY mois;
 
 --Partie 5 — Qualité des données
+
 --Exercice 13 — Détecter une incohérence
 --Rechercher les commandes dont la date est antérieure à la date d'inscription du client.
 --Pour chaque anomalie, afficher au minimum :
@@ -221,7 +223,8 @@ JOIN client ON commande.client_id = client.id
 WHERE commande.date_commande < client.date_inscription;
 
 
-Exercice 14: Produits sans vente
+
+--EXO 14: Produits sans vente
 
 SELECT
     p.nom AS produit,
@@ -243,3 +246,81 @@ WHERE lc.produit_id IS NULL;
 -- leur visibilité, ajuster leur prix ou même envisager de les retirer de son catalogue.
 -- Elle peut ainsi prendre des décisions commerciales, comme lancer une promotion,
 -- modifier le prix ou réduire le stock, afin de limiter les produits invendus.
+
+
+--PARTIE 6 — Analyse de la qualité des données
+
+--●	le nombre de lignes de chaque table ;
+SELECT 'Clients' AS Nom_Table , COUNT(*) AS nb_lignes FROM client
+UNION ALL
+SELECT 'Produits' , COUNT(*) AS nb_lignes FROM produit
+UNION ALL
+SELECT 'Commandes' , COUNT(*) AS nb_lignes FROM commande
+UNION ALL
+SELECT 'Lignes de commande', COUNT(*) AS nb_lignes FROM ligne_commande
+ORDER BY Nom_Table;
+
+--●	les colonnes et leurs types de données 
+SELECT table_name,
+        column_name,
+        data_type
+FROM information_schema.columns
+WHERE table_schema = 'public'  
+ORDER BY table_name, ordinal_position;
+
+--●	les éventuelles valeurs manquantes.
+SELECT *
+FROM (
+    SELECT 'client' AS nom_table, 'nom' AS nom_colonne, COUNT(*) - COUNT(nom) AS nb_manquants FROM client
+    UNION ALL
+    SELECT 'client', 'prenom', COUNT(*) - COUNT(prenom) FROM client
+    UNION ALL
+    SELECT 'client', 'email', COUNT(*) - COUNT(email) FROM client
+    UNION ALL
+    SELECT 'client', 'ville', COUNT(*) - COUNT(ville) FROM client
+    UNION ALL
+    SELECT 'client', 'date_inscription', COUNT(*) - COUNT(date_inscription) FROM client
+    UNION ALL
+    SELECT 'produit', 'nom', COUNT(*) - COUNT(nom) FROM produit
+    UNION ALL
+    SELECT 'produit', 'categorie', COUNT(*) - COUNT(categorie) FROM produit
+    UNION ALL
+    SELECT 'produit', 'prix', COUNT(*) - COUNT(prix) FROM produit
+    UNION ALL
+    SELECT 'produit', 'stock', COUNT(*) - COUNT(stock) FROM produit
+    UNION ALL
+    SELECT 'commande', 'client_id', COUNT(*) - COUNT(client_id) FROM commande
+    UNION ALL
+    SELECT 'commande', 'date_commande', COUNT(*) - COUNT(date_commande) FROM commande
+    UNION ALL
+    SELECT 'commande', 'statut', COUNT(*) - COUNT(statut) FROM commande
+    UNION ALL
+    SELECT 'ligne_commande', 'commande_id', COUNT(*) - COUNT(commande_id) FROM ligne_commande
+    UNION ALL
+    SELECT 'ligne_commande', 'produit_id', COUNT(*) - COUNT(produit_id) FROM ligne_commande
+    UNION ALL
+    SELECT 'ligne_commande', 'quantite', COUNT(*) - COUNT(quantite) FROM ligne_commande
+    UNION ALL
+    SELECT 'ligne_commande', 'prix_unitaire', COUNT(*) - COUNT(prix_unitaire) FROM ligne_commande
+) t
+WHERE nb_manquants > 0
+ORDER BY nom_table, nom_colonne;
+
+--●	le chiffre d'affaires total ;
+--●	le nombre de commandes ;
+--●	le panier moyen ;
+--●	le nombre de clients actifs.
+--●	le taux d'annulation des commandes.
+
+
+SELECT 
+    SUM(CASE WHEN c.statut <> 'annulée' THEN prix_unitaire * quantite ELSE 0 END) AS chiffre_affaires, 
+    COUNT(DISTINCT CASE WHEN c.statut <> 'annulée' THEN c.id END) AS nb_commandes,
+    ROUND(SUM(CASE WHEN c.statut <> 'annulée' THEN prix_unitaire * quantite ELSE 0 END) / COUNT(DISTINCT CASE WHEN c.statut <> 'annulée' THEN c.id END), 2) AS panier_moyen,
+    COUNT(DISTINCT c.client_id) AS nb_clients_actifs,
+    COUNT(DISTINCT CASE WHEN c.statut = 'annulée' THEN c.id END) * 100.0 / COUNT(DISTINCT c.id) AS taux_annulation
+
+FROM ligne_commande
+JOIN commande c ON ligne_commande.commande_id = c.id
+WHERE
+      c.date_commande >= (SELECT MAX(date_commande) FROM commande) - INTERVAL '30 days';
